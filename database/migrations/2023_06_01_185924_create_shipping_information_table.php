@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shipping_information', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('user');
+            $table->foreignId('user_id')->constrained('users');
             $table->string('options')->nullable();
             $table->decimal('price', 8, 2)->nullable();
             $table->timestamps();

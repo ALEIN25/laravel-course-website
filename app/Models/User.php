@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'phonenr',
         'email',
         'password',
     ];
@@ -42,4 +43,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function shippingInformation()
+{
+    return $this->hasOne(ShippingInformation::class);
+}
 }
