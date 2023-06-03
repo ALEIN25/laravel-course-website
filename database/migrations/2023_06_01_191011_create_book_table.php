@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->foreignId('seller')->constrained('users');
             $table->string('name');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->date('release_date');
             $table->text('condition')->nullable();
-            $table->string('image');
+            $table->binary('image')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('book');
+        Schema::dropIfExists('books');
     }
 };

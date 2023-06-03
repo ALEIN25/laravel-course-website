@@ -12,7 +12,7 @@
 <div class="website-bar">
   <a href="{{route('welcome')}}" class="logo">InkVendor</a>
   <div class="navigation">
-    <a href="#">Start Selling!</a>
+    <a href="{{ route('books.create') }}">Start Selling!</a>
     <a href="#">Start Buying!</a>
   </div>
   <div class="search-bar">
@@ -39,6 +39,7 @@
   @endauth
 </div>
 </header>
+
 <main>
     @yield('content')
 </main>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookController;
 
 
 /*
@@ -42,3 +43,11 @@ Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
 
 Route::post('/profile/shipping', [ProfileController::class, 'updateShipping'])->middleware('auth')->name('profile.shipping');
+
+Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+
+Route::post('/books', [BookController::class, 'store'])->name('books.store');
+
+Route::get('/', [BookController::class, 'index'])->name('welcome');
+
+
