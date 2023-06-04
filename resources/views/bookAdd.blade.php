@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+@auth
     <h1>Create Book</h1>
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -50,4 +51,7 @@
 
         <button type="submit">Create Book</button>
     </form>
+    @else
+    <p>To add a book please login or register first</p>
+@endauth
 @endsection

@@ -13,7 +13,7 @@
   <a href="{{route('welcome')}}" class="logo">InkVendor</a>
   <div class="navigation">
     <a href="{{ route('books.create') }}">Start Selling!</a>
-    <a href="#">Start Buying!</a>
+    <a href="{{ route('books.view') }}">Start Buying!</a>
   </div>
   <div class="search-bar">
     <input type="text" placeholder="Search">

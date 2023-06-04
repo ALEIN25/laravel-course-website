@@ -7,7 +7,8 @@
 <div class="book-list">
         @foreach ($books as $book)
             <div class="book-item">
-                <img src="{{ asset('storage/' . $book->image) }}" alt="Book Image">
+            <a href="{{ route('books.show', ['id' => $book->id]) }}">
+            <img src="{{ asset('storage/images/resized/' . $book->resized_image) }}" alt="Book Image">
                 <h3>{{ $book->name }}</h3>
                 <p>Author: {{ $book->author }}</p>
                 <p>Price: {{ $book->price }}</p>

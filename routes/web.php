@@ -50,4 +50,12 @@ Route::post('/books', [BookController::class, 'store'])->name('books.store');
 
 Route::get('/', [BookController::class, 'index'])->name('welcome');
 
+Route::get('/books/view', [BookController::class, 'view'])->name('books.view');
+
+Route::get('/books', [BookController::class, 'indexBook'])->name('books.index');
+
+Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
+
+
+
 

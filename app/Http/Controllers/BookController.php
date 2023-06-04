@@ -15,12 +15,32 @@ class BookController extends Controller
     }
     public function index()
     {
-        // Fetch the books from the database
-        $books = Book::all();
-
-        // Pass the books to the view
+        // Fetch three random books from the database
+        $books = Book::inRandomOrder()->limit(3)->get();
+    
+        foreach ($books as $book) {
+            $book->image = asset('storage/images/resized/' . $book->image);
+        }
+    
         return view('welcome', ['books' => $books]);
     }
+    
+    public function view()
+    {
+        // Fetch the books from the database
+        $books = Book::all();
+        foreach ($books as $book) {
+            $book->image = asset('storage/images/resized/' . $book->image);
+        }
+        return view('books', ['books' => $books]);
+    }
+    public function show($id)
+    {
+        $book = Book::findOrFail($id);
+        return view('bookView', ['book' => $book]);
+    }
+    
+
     public function store(Request $request)
     {
         // Validate the form data
@@ -43,8 +63,11 @@ class BookController extends Controller
             // Resize and encode the image
             $image = ImageManager::make($image)->encode('jpg');
     
+            // Generate a unique filename for the resized image
+            $resizedImageFilename = 'resized_' . uniqid() . '.jpg';
+    
             // Store the resized image in the storage directory
-            $resizedImagePath = 'public/images/resized/' . $image->basename;
+            $resizedImagePath = 'public/images/resized/' . $resizedImageFilename;
             Storage::put($resizedImagePath, $image);
     
             // Store the book information including the image paths in the database
@@ -56,7 +79,7 @@ class BookController extends Controller
             $book->release_date = $request->input('release_date');
             $book->condition = $request->input('condition');
             $book->image = $imagePath;
-            $book->resized_image = $resizedImagePath;
+            $book->resized_image = $resizedImageFilename;
             $book->save();
     
             return redirect()->back()->with('success', 'Book added successfully.');
