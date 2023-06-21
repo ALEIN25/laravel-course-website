@@ -6,18 +6,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookController;
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', function () {return view('welcome');})->name('welcome');
 Route::get('/about', function () {return view('about');})->name('about');
 
@@ -27,15 +15,12 @@ Route::get('/register', 'UserController@showRegistrationForm')->name('register')
 Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [UserController::class, 'register']);
 
+Route::get('/books/search', [BookController::class, 'search'])->name('books.search');
 
-
-// Route for displaying the login form
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 
-// Route for handling the login form submission
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-// Route for logging out the user
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
@@ -56,6 +41,8 @@ Route::get('/books', [BookController::class, 'indexBook'])->name('books.index');
 
 Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
 
+Route::get('/my-books', [BookController::class, 'myBooks'])->name('my-books')->middleware('auth');
 
-
-
+Route::delete('/books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
+Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('books.edit');
+Route::put('/books/{id}', [BookController::class, 'update'])->name('books.update');

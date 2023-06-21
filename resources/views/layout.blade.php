@@ -16,8 +16,10 @@
     <a href="{{ route('books.view') }}">Start Buying!</a>
   </div>
   <div class="search-bar">
-    <input type="text" placeholder="Search">
+  <form action="{{ route('books.search') }}" method="GET">
+    <input type="search" name="query">
     <button type="submit">Search</button>
+</form>
   </div>
   @auth
   <div class="user-actions">

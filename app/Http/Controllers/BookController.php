@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Book;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as ImageManager;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -15,19 +16,17 @@ class BookController extends Controller
     }
     public function index()
     {
-        // Fetch three random books from the database
         $books = Book::inRandomOrder()->limit(3)->get();
-    
+
         foreach ($books as $book) {
             $book->image = asset('storage/images/resized/' . $book->image);
         }
-    
+
         return view('welcome', ['books' => $books]);
     }
-    
+
     public function view()
     {
-        // Fetch the books from the database
         $books = Book::all();
         foreach ($books as $book) {
             $book->image = asset('storage/images/resized/' . $book->image);
@@ -39,11 +38,17 @@ class BookController extends Controller
         $book = Book::findOrFail($id);
         return view('bookView', ['book' => $book]);
     }
-    
+    public function myBooks()
+    {
+        $user = Auth::user();
+        $books = Book::where('seller', $user->id)->get();
+
+        return view('myBooks', ['books' => $books]);
+    }
+
 
     public function store(Request $request)
     {
-        // Validate the form data
         $request->validate([
             'name' => 'required',
             'author' => 'required',
@@ -53,24 +58,17 @@ class BookController extends Controller
             'condition' => 'nullable',
             'image' => 'required|image',
         ]);
-    
+
         try {
-            // Save the uploaded image to the storage directory
             $image = $request->file('image');
             $imagePath = $image->store('public/images');
             $imagePath = str_replace('public/', '', $imagePath);
-    
-            // Resize and encode the image
-            $image = ImageManager::make($image)->encode('jpg');
-    
-            // Generate a unique filename for the resized image
+            $resizedImage = ImageManager::make($image)->resize(400, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
             $resizedImageFilename = 'resized_' . uniqid() . '.jpg';
-    
-            // Store the resized image in the storage directory
             $resizedImagePath = 'public/images/resized/' . $resizedImageFilename;
-            Storage::put($resizedImagePath, $image);
-    
-            // Store the book information including the image paths in the database
+            Storage::put($resizedImagePath, $resizedImage->encode('jpg'));
             $book = new Book(['seller' => auth()->id()]);
             $book->name = $request->input('name');
             $book->author = $request->input('author');
@@ -81,14 +79,75 @@ class BookController extends Controller
             $book->image = $imagePath;
             $book->resized_image = $resizedImageFilename;
             $book->save();
-    
+
             return redirect()->back()->with('success', 'Book added successfully.');
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
             $errors = collect([$errorMessage]);
-    
+
             return redirect()->back()->withErrors($errors)->withInput();
         }
+    }
+    public function destroy($id)
+    {
+        $book = Book::findOrFail($id);
+        Storage::delete([
+            'public/' . $book->image,
+            'public/images/resized/' . $book->resized_image,
+        ]);
+        $book->delete();
+
+        return redirect()->back()->with('success', 'Book removed successfully.');
+    }
+
+    public function edit($id)
+    {
+        $book = Book::findOrFail($id);
+
+        return view('bookEdit', ['book' => $book]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $book = Book::findOrFail($id);
+        $request->validate([
+            'name' => 'required',
+            'author' => 'required',
+            'ISBN' => 'required',
+            'price' => 'required|numeric',
+            'release_date' => 'required|date',
+            'condition' => 'nullable',
+        ]);
+
+        try {
+            $book->name = $request->input('name');
+            $book->author = $request->input('author');
+            $book->isbn = $request->input('ISBN');
+            $book->price = $request->input('price');
+            $book->release_date = $request->input('release_date');
+            $book->condition = $request->input('condition');
+            $book->save();
+
+            return redirect()->back()->with('success', 'Book updated successfully.');
+        } catch (\Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errors = collect([$errorMessage]);
+
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+    }
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $books = Book::where('name', 'like', '%' . $query . '%')
+            ->orWhere('author', 'like', '%' . $query . '%')
+            ->orWhere('ISBN', 'like', '%' . $query . '%')
+            ->get();
+
+        return view('search', [
+            'books' => $books,
+            'query' => $query
+        ]);
     }
     
 }

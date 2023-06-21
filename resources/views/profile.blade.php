@@ -6,7 +6,7 @@
         <p>Name: {{ $user->name }}</p>
         <p>Email: {{ $user->email }}</p>
         <p>Phone number: {{ $user->phonenr }}</p>
-
+        <a href="{{ route('my-books') }}">My Books</a>
         <p>If you wish to sell, please add your shipping information:</p>
         <form method="POST" action="{{ route('profile.shipping') }}">
             @csrf

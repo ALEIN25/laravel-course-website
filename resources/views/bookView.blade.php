@@ -5,11 +5,11 @@
         <h1>{{ $book->name }}</h1>
         <p>Author: {{ $book->author }}</p>
         <p>Price: {{ $book->price }}</p>
-        <!-- Add more book information here -->
-
-
+        <p>ISBN: {{ $book->ISBN }}</p>
+        <p>Release date: {{ $book->release_date }}</p>
+        <p>Comment: {{ $book->condition}}</p>
             @csrf
-            <!-- Add contact form fields here -->
+
             <button type="submit">Contact Seller</button>
         </form>
     </div>
