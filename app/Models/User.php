@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Book;
 
 class User extends Authenticatable
 {
@@ -44,7 +45,16 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
     public function shippingInformation()
-{
-    return $this->hasOne(ShippingInformation::class);
-}
+    {
+        return $this->hasOne(ShippingInformation::class);
+    }
+    public function wishlist(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class, 'wishlist', 'user_id', 'book_id')->withTimestamps();
+    }    
+
+    public function isInWishlist(Book $book): bool
+    {
+        return $this->wishlist->contains($book);
+    }
 }

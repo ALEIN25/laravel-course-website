@@ -5,9 +5,16 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\WishlistController;
 
 Route::get('/', function () {return view('welcome');})->name('welcome');
 Route::get('/about', function () {return view('about');})->name('about');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/wishlist/add/{id}', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
+    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
+});
+Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist');
 
 
 Route::get('/register', 'UserController@showRegistrationForm')->name('register');
@@ -46,3 +53,5 @@ Route::get('/my-books', [BookController::class, 'myBooks'])->name('my-books')->m
 Route::delete('/books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
 Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('books.edit');
 Route::put('/books/{id}', [BookController::class, 'update'])->name('books.update');
+
+

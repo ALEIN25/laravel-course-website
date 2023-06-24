@@ -23,6 +23,7 @@
   </div>
   @auth
   <div class="user-actions">
+    <a href="{{ route('wishlist') }}">Wishlist</a>
     <a href="{{ route('profile') }}">Profile</a>
     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
     Logout
