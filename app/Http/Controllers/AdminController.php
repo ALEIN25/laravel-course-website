@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -22,18 +23,22 @@ class AdminController extends Controller
 
     public function deleteUser($id)
     {
-
         $user = User::findOrFail($id);
-
-        if ($user->isAdmin()) {
-
-            return redirect()->back()->with('message', 'You do not have permission to delete an admin.');
+    
+        $books = $user->books;
+        foreach ($books as $book) {
+            Storage::disk('public')->delete([
+                $book->image,
+                'images/resized/' . $book->resized_image,
+            ]);
+    
+            $book->delete();
         }
-        $user->books()->delete();
-
-
+    
         $user->delete();
-
-        return redirect()->route('admin.users')->with('message', 'User profile and associated books deleted successfully.');
+    
+        return redirect()->back()->with('message', 'User and associated books deleted successfully.');
     }
+    
+    
 }

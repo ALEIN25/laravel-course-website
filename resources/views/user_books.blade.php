@@ -1,5 +1,6 @@
 @extends('layout')
 @section('content')
+<a href="{{ route('admin.users') }}">Back</a>
 @if(session('message'))
 <div>{{ session('message') }}</div>
 @endif

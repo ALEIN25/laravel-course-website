@@ -58,7 +58,6 @@
   <footer>
     <div class="bottom-bar">
       <a href="{{ route('about') }}" class="centered-text">Find out more about us</a>
-      <a href="#" class="right-aligned-text">Contact us</a>
     </div>
   </footer>
 </body>
