@@ -35,9 +35,10 @@ class BookController extends Controller
     }
     public function show($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Book::with('seller')->findOrFail($id);
         return view('bookView', ['book' => $book]);
     }
+    
     public function myBooks()
     {
         $user = Auth::user();
@@ -80,7 +81,7 @@ class BookController extends Controller
             $book->resized_image = $resizedImageFilename;
             $book->save();
 
-            return redirect()->back()->with('success', 'Book added successfully.');
+            return redirect()->route('books.show', ['id' => $book->id])->with('message', 'Book added successfully.');
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
             $errors = collect([$errorMessage]);
@@ -97,7 +98,7 @@ class BookController extends Controller
         ]);
         $book->delete();
 
-        return redirect()->back()->with('success', 'Book removed successfully.');
+        return redirect()->back()->with('message', 'Book removed successfully.');
     }
 
     public function edit($id)
@@ -128,7 +129,7 @@ class BookController extends Controller
             $book->condition = $request->input('condition');
             $book->save();
 
-            return redirect()->back()->with('success', 'Book updated successfully.');
+            return redirect()->route('books.show', ['id' => $book->id])->with('message', 'Book updated successfully.');
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
             $errors = collect([$errorMessage]);
@@ -149,7 +150,6 @@ class BookController extends Controller
             'query' => $query
         ]);
     }
-    
 }
 
 

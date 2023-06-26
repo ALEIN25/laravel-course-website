@@ -12,6 +12,7 @@
                 <h3>{{ $book->name }}</h3>
                 <p>Author: {{ $book->author }}</p>
                 <p>Price: {{ $book->price }}</p>
+            </a>
             </div>
         @endforeach
     </div>

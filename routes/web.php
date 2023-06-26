@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\AdminController;
+
 
 Route::get('/', function () {return view('welcome');})->name('welcome');
 Route::get('/about', function () {return view('about');})->name('about');
@@ -15,7 +17,14 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
 });
 Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist');
+Route::middleware(['auth', 'admin'])->group(function () {
 
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::get('/admin/users/{id}/books', [AdminController::class, 'userBooks'])->name('admin.user.books');
+    Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.user.delete');
+});
 
 Route::get('/register', 'UserController@showRegistrationForm')->name('register');
 
@@ -53,5 +62,3 @@ Route::get('/my-books', [BookController::class, 'myBooks'])->name('my-books')->m
 Route::delete('/books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
 Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('books.edit');
 Route::put('/books/{id}', [BookController::class, 'update'])->name('books.update');
-
-

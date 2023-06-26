@@ -44,6 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'seller');
+    }
+
     public function shippingInformation()
     {
         return $this->hasOne(ShippingInformation::class);
@@ -51,10 +56,15 @@ class User extends Authenticatable
     public function wishlist(): BelongsToMany
     {
         return $this->belongsToMany(Book::class, 'wishlist', 'user_id', 'book_id')->withTimestamps();
-    }    
+    }
 
     public function isInWishlist(Book $book): bool
     {
         return $this->wishlist->contains($book);
+    }
+    const ROLE_ADMIN = 'admin';
+    public function isAdmin()
+    {
+        return $this->role === self::ROLE_ADMIN;
     }
 }

@@ -12,19 +12,50 @@
     <p>Release date: {{ $book->release_date }}</p>
     <p>Comment: {{ $book->condition}}</p>
     @csrf
-    @if(auth()->check() && auth()->user()->isInWishlist($book))
-    <form action="{{ route('wishlist.remove', $book->id) }}" method="POST">
-        @csrf
-        @method('DELETE')
-        <button type="submit">Remove from Wishlist</button>
-    </form>
-
+</div>
+<button id="reveal-info">Show seller information</button>
+<div id="seller-info" style="display: none;">
+    <h2>Seller Information</h2>
+    @php
+    $sellerInfo = $book->getSellerInfo();
+    @endphp
+    @if ($sellerInfo)
+    <p>Email: {{ $sellerInfo['email'] }}</p>
+    <p>Phone Number: {{ $sellerInfo['phonenr'] }}</p>
     @else
-
-    <form action="{{ route('wishlist.add', ['id' => $book->id]) }}" method="POST">
-        @csrf
-        <button type="submit">Add to Wishlist</button>
-    </form>
+    <p>No user info.</p>
     @endif
+</div>
+
+<script>
+    document.getElementById('reveal-info').addEventListener('click', function() {
+        var sellerInfo = document.getElementById('seller-info');
+        sellerInfo.style.display = sellerInfo.style.display === 'none' ? 'block' : 'none';
+    });
+</script>
+
+
+@auth
+@if(Auth::user()->isAdmin())
+<form method="POST" action="{{ route('books.destroy', ['id' => $book->id]) }}">
+    @csrf
+    @method('DELETE')
+    <button type="submit">Remove</button>
+</form>
+@endif
+@endauth
+@if(auth()->check() && auth()->user()->isInWishlist($book))
+<form action="{{ route('wishlist.remove', $book->id) }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="submit">Remove from Wishlist</button>
+</form>
+@else
+
+<form action="{{ route('wishlist.add', ['id' => $book->id]) }}" method="POST">
+    @csrf
+    <button type="submit">Add to Wishlist</button>
+</form>
+@endif
 </div>
 @endsection

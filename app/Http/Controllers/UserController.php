@@ -29,7 +29,7 @@ class UserController extends Controller
             'role' => 'user',
         ]);
 
-        return redirect('/')->with('success', 'Registration successful. Please log in.');
+        return redirect('/')->with('message', 'Registration successful. Please log in.');
     }
 }
 

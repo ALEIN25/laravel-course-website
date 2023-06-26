@@ -24,7 +24,7 @@ class WishlistController extends Controller
         if ($book->seller == $user->id) {
             return redirect()->back()->with('message', 'You cannot wishlist your own book.');
         }
-        
+
         if ($user->wishlist()->where('book_id', $id)->exists()) {
             return redirect()->back()->with('message', 'Book is already in your wishlist.');
         }
