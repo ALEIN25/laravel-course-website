@@ -7,58 +7,108 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LocalizationController;
 
+Route::get('/lang/{locale}', [LocalizationController::class, 'setLocale'])
+    ->name('locale.set')
+    ->middleware('locale');
 
-Route::get('/', function () {return view('welcome');})->name('welcome');
-Route::get('/about', function () {return view('about');})->name('about');
+Route::get('/{locale?}', [BookController::class, 'index'])
+    ->name('welcome')
+    ->middleware('locale');
+
+Route::get('/{locale?}/about', function () {
+    return view('about');
+})
+    ->name('about')
+    ->middleware('locale');
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/wishlist/add/{id}', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
-    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
+    Route::post('/wishlist/add/{id}', [WishlistController::class, 'addToWishlist'])
+        ->name('wishlist.add')
+        ->middleware('locale');
+
+    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'removeFromWishlist'])
+        ->name('wishlist.remove');
 });
-Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist');
+
+Route::get('/{locale?}/wishlist', [WishlistController::class, 'show'])
+    ->name('wishlist')
+    ->middleware('locale');
+
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/{locale?}/admin', [AdminController::class, 'dashboard'])
+        ->name('admin.dashboard')
+        ->middleware('locale');
 
-    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/{locale?}/admin/users', [AdminController::class, 'users'])
+        ->name('admin.users')
+        ->middleware('locale');
 
-    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::get('/admin/users/{id}/books', [AdminController::class, 'userBooks'])->name('admin.user.books');
-    Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.user.delete');
+    Route::get('/{locale?}/admin/users/{id}/books', [AdminController::class, 'userBooks'])
+        ->name('admin.user.books')
+        ->middleware('locale');
+
+    Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])
+        ->name('admin.user.delete');
 });
 
-Route::get('/register', 'UserController@showRegistrationForm')->name('register');
+Route::get('/{locale?}/register', [UserController::class, 'showRegistrationForm'])
+    ->name('register')
+    ->middleware('locale');
 
-Route::get('/register', [UserController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [UserController::class, 'register']);
 
-Route::get('/books/search', [BookController::class, 'search'])->name('books.search');
+Route::get('/{locale?}/books/search', [BookController::class, 'search'])
+    ->name('books.search')
+    ->middleware('locale');
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/{locale?}/login', [LoginController::class, 'showLoginForm'])
+    ->name('login')
+    ->middleware('locale');
 
-Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+Route::post('/login', [LoginController::class, 'login'])
+    ->name('login.submit');
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->name('logout');
 
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+Route::get('/{locale?}/profile', [ProfileController::class, 'show'])
+    ->name('profile')
+    ->middleware('auth')
+    ->middleware('locale');
 
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile')->middleware('auth');
+Route::post('/profile/shipping', [ProfileController::class, 'updateShipping'])
+    ->name('profile.shipping')
+    ->middleware('auth');
 
-Route::post('/profile/shipping', [ProfileController::class, 'updateShipping'])->middleware('auth')->name('profile.shipping');
+Route::get('/{locale?}/books/create', [BookController::class, 'create'])
+    ->name('books.create')
+    ->middleware('locale');
 
-Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+Route::post('/books', [BookController::class, 'store'])
+    ->name('books.store');
 
-Route::post('/books', [BookController::class, 'store'])->name('books.store');
+Route::get('/{locale?}/books/view', [BookController::class, 'view'])
+    ->name('books.view')
+    ->middleware('locale');
+    
+Route::get('/{locale?}/books/{id}', [BookController::class, 'show'])
+    ->name('books.show')
+    ->middleware('locale');
+Route::get('/{locale?}/books/{id}/edit', [BookController::class, 'edit'])
+    ->name('books.edit')
+    ->middleware('locale');
 
-Route::get('/', [BookController::class, 'index'])->name('welcome');
+Route::put('/books/update/{id}', [BookController::class, 'update'])
+    ->name('books.update');
 
-Route::get('/books/view', [BookController::class, 'view'])->name('books.view');
+Route::get('/{locale?}/my-books', [BookController::class, 'myBooks'])
+    ->name('my-books')
+    ->middleware('auth')
+    ->middleware('locale');
 
-Route::get('/books', [BookController::class, 'indexBook'])->name('books.index');
-
-Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
-
-Route::get('/my-books', [BookController::class, 'myBooks'])->name('my-books')->middleware('auth');
-
-Route::delete('/books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
-Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('books.edit');
-Route::put('/books/{id}', [BookController::class, 'update'])->name('books.update');
+Route::delete('/books/delete/{id}', [BookController::class, 'destroy'])
+    ->name('books.destroy');
+Route::delete('/books/admindelete/{id}', [BookController::class, 'admindestroy'])
+    ->name('books.admindestroy');

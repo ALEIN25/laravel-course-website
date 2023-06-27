@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
 {
@@ -28,8 +29,9 @@ class UserController extends Controller
             'phonenr' => $validatedData['phonenr'],
             'role' => 'user',
         ]);
+        $locale = $request->input('locale');
 
-        return redirect('/')->with('message', 'Registration successful. Please log in.');
+        return redirect()->route('login', ['locale' => $locale])->with('message', 'messages.registersuccses');
     }
 }
 

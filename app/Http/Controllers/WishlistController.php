@@ -22,11 +22,11 @@ class WishlistController extends Controller
 
         $book = Book::findOrFail($id);
         if ($book->seller == $user->id) {
-            return redirect()->back()->with('message', 'You cannot wishlist your own book.');
+            return redirect()->back()->with('message', 'messages.ownbookwish');
         }
 
         if ($user->wishlist()->where('book_id', $id)->exists()) {
-            return redirect()->back()->with('message', 'Book is already in your wishlist.');
+            return redirect()->back()->with('message', 'messages.wishlistedalready');
         }
 
         $wishlist = new Wishlist();
@@ -34,7 +34,7 @@ class WishlistController extends Controller
         $wishlist->book_id = $id;
         $wishlist->save();
 
-        return redirect()->back()->with('message', 'Book added to your wishlist.');
+        return redirect()->back()->with('message', 'messages.wishlistsuccseful');
     }
 
     public function removeFromWishlist(Request $request, $id)
@@ -44,10 +44,10 @@ class WishlistController extends Controller
         $wishlist = $user->wishlist()->where('book_id', $id)->first();
         if ($wishlist) {
             $user->wishlist()->detach($id);
-            return redirect()->back()->with('message', 'Book removed from your wishlist.');
+            return redirect()->back()->with('message', 'messages.wishlistremoved');
         }
 
-        return redirect()->back()->with('message', 'Book is not in your wishlist.');
+        return redirect()->back()->with('message', 'messages.wishlistnotpresent');
     }
 }
 

@@ -2,10 +2,10 @@
 
 @section('content')
     <div class="profile-container">
-        <h1>Profile</h1>
-        <p>Name: {{ $user->name }}</p>
-        <p>Email: {{ $user->email }}</p>
-        <p>Phone number: {{ $user->phonenr }}</p>
-        <a href="{{ route('my-books') }}">My Books</a>
+        <h1>{{__('messages.profile')}}</h1>
+        <p>{{__('messages.name')}} {{ $user->name }}</p>
+        <p>{{__('messages.email')}} {{ $user->email }}</p>
+        <p>{{__('messages.phonenum')}} {{ $user->phonenr }}</p>
+        <a href="{{ route('my-books', ['locale' => app()->getLocale()])}}">My Books</a>
     </div>
 @endsection

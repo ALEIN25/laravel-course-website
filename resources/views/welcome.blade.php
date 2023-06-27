@@ -1,17 +1,16 @@
 @extends('layout')
 @section('content')
-
-<p class="welcome-message">Welcome to InkVendor, a online platform that let's you sell and buy books directly.</p>
-<p class="welcome-message">We believe that books are a way to a better life. Join us! </p>
+<p class="welcome-message">{{ __('messages.welcome')}}</p>
+<p class="welcome-message">{{ __('messages.believe')}}</p>
 
 <div class="book-list">
         @foreach ($books as $book)
             <div class="book-item">
-            <a href="{{ route('books.show', ['id' => $book->id]) }}">
+            <a href="{{ route('books.show', ['id' => $book->id, 'locale' => app()->getLocale()]) }}">
             <img src="{{ asset('storage/images/resized/' . $book->resized_image) }}" alt="Book Image">
                 <h3>{{ $book->name }}</h3>
-                <p>Author: {{ $book->author }}</p>
-                <p>Price: {{ $book->price }}</p>
+                <p>{{__('messages.author')}} {{ $book->author }}</p>
+                <p>{{__('messages.price')}} {{ $book->price }}</p>
             </a>
             </div>
         @endforeach

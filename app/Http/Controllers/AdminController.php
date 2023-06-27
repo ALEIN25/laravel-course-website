@@ -15,14 +15,15 @@ class AdminController extends Controller
 
         return view('users', ['users' => $users]);
     }
-    public function userBooks($id)
+    public function userBooks($locale, $id)
     {
         $user = User::with('books')->findOrFail($id);
         return view('user_books', ['user' => $user]);
     }
 
-    public function deleteUser($id)
+    public function deleteUser(Request $request)
     {
+        $id = $request->input('id');
         $user = User::findOrFail($id);
     
         $books = $user->books;
@@ -37,8 +38,6 @@ class AdminController extends Controller
     
         $user->delete();
     
-        return redirect()->back()->with('message', 'User and associated books deleted successfully.');
+        return redirect()->back()->with('message', 'messages.userremoved');
     }
-    
-    
 }

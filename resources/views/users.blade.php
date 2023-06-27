@@ -1,18 +1,18 @@
 @extends('layout')
 @section('content')
 @if(session('message'))
-<div>{{ session('message') }}</div>
+    <div>{{ __(session('message')) }}</div>
 @endif
-<h1>Users</h1>
+<h1>{{__('messages.users')}}</h1>
 
 <table>
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>PhoneNr</th>
-            <th>Role</th>
-            <th>Actions</th>
+            <th>{{__('messages.name')}}</th>
+            <th>{{__('messages.email')}}</th>
+            <th>{{__('messages.phonenum')}}</th>
+            <th>{{__('messages.role')}}</th>
+            <th>{{__('messages.actions')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -23,12 +23,14 @@
             <td>{{ $user->phonenr }}</td>
             <td>{{ $user->role }}</td>
             <td>
-                <a href="{{ route('admin.user.books', ['id' => $user->id]) }}">View Books</a>
-                <form action="{{ route('admin.user.delete', ['id' => $user->id]) }}" method="POST">
+                <a href="{{ route('admin.user.books', ['id' => $user->id, 'locale' => app()->getLocale()]) }}">{{__('messages.viewbooks')}}</a>
+                <form action="{{ route('admin.user.delete', ['locale' => app()->getLocale(), 'id' => $user->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit">Delete Profile</button>
+                    <input type="hidden" name="id" value="{{ $user->id }}">
+                    <button type="submit">{{__('messages.deleteprofile')}}</button>
                 </form>
+
             </td>
         </tr>
         @endforeach

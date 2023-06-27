@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as ImageManager;
 use Illuminate\Support\Facades\Auth;
 
+
 class BookController extends Controller
 {
     public function create()
@@ -33,7 +34,7 @@ class BookController extends Controller
         }
         return view('books', ['books' => $books]);
     }
-    public function show($id)
+    public function show($locale, $id)
     {
         $book = Book::with('seller')->findOrFail($id);
         return view('bookView', ['book' => $book]);
@@ -50,6 +51,7 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
+        $locale = $request->input('locale');
         $request->validate([
             'name' => 'required',
             'author' => 'required',
@@ -80,8 +82,7 @@ class BookController extends Controller
             $book->image = $imagePath;
             $book->resized_image = $resizedImageFilename;
             $book->save();
-
-            return redirect()->route('books.show', ['id' => $book->id])->with('message', 'Book added successfully.');
+            return redirect()->route('books.show', ['id' => $book->id, 'locale' => $locale])->with('message', 'messages.bookaddsuccsesful');
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
             $errors = collect([$errorMessage]);
@@ -98,10 +99,21 @@ class BookController extends Controller
         ]);
         $book->delete();
 
-        return redirect()->back()->with('message', 'Book removed successfully.');
+        return redirect()->back()->with('message', 'message.bookdestroyed');
     }
+    public function admindestroy($id)
+    {
+        $locale = app()->getLocale();
+        $book = Book::findOrFail($id);
+        Storage::delete([
+            'public/' . $book->image,
+            'public/images/resized/' . $book->resized_image,
+        ]);
+        $book->delete();
 
-    public function edit($id)
+        return redirect()->route('welcome', ['locale' => $locale])->with('message', 'message.bookdestroyed');
+    }
+    public function edit($locale, $id)
     {
         $book = Book::findOrFail($id);
 
@@ -110,6 +122,7 @@ class BookController extends Controller
 
     public function update(Request $request, $id)
     {
+        $locale = $request->input('locale');
         $book = Book::findOrFail($id);
         $request->validate([
             'name' => 'required',
@@ -129,7 +142,7 @@ class BookController extends Controller
             $book->condition = $request->input('condition');
             $book->save();
 
-            return redirect()->route('books.show', ['id' => $book->id])->with('message', 'Book updated successfully.');
+            return redirect()->route('books.show', ['id' => $book->id, 'locale' => $locale])->with('message', 'messages.bookedit');
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
             $errors = collect([$errorMessage]);

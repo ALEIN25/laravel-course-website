@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +15,12 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        $locale = $request->input('locale');
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
             // Authentication successful
-            return redirect()->intended('/');
+            return redirect()->intended('/' . $locale);
         }
 
         // Authentication failed
@@ -31,7 +32,8 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        $locale = App::getLocale();
 
-        return redirect('/')->with('success', 'Logout successful');
+        return redirect('/' . $locale)->with('success', 'Logout successful');
     }
 }
