@@ -1,5 +1,7 @@
 @extends('layout')
 @section('content')
+<div class="register-container">
+<div class="register-form">
     <h1>{{__('messages.register')}}</h1>
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -40,4 +42,6 @@
 
         <button type="submit">{{__('messages.register')}}</button>
     </form>
+</div>
+</div>
 @endsection
