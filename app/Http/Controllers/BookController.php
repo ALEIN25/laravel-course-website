@@ -53,13 +53,13 @@ class BookController extends Controller
     {
         $locale = $request->input('locale');
         $request->validate([
-            'name' => 'required',
-            'author' => 'required',
-            'isbn' => 'required',
-            'price' => 'required|numeric',
-            'release_date' => 'required|date',
-            'condition' => 'nullable',
-            'image' => 'required|image',
+            'name' => 'required|max:255',
+            'author' => 'required|max:255',
+            'isbn' => 'required|max:17',
+            'price' => 'required|numeric|min:0',
+            'release_date' => 'required|date|before_or_equal:today',
+            'condition' => 'nullable|max:1000',
+            'image' => 'required|image|dimensions:max_width=800,max_height=800|max:2048',
         ]);
 
         try {
@@ -125,12 +125,12 @@ class BookController extends Controller
         $locale = $request->input('locale');
         $book = Book::findOrFail($id);
         $request->validate([
-            'name' => 'required',
-            'author' => 'required',
-            'ISBN' => 'required',
-            'price' => 'required|numeric',
-            'release_date' => 'required|date',
-            'condition' => 'nullable',
+            'name' => 'required|max:255',
+            'author' => 'required|max:255',
+            'ISBN' => 'required|max:17',
+            'price' => 'required|numeric|min:0',
+            'release_date' => 'required|date|before_or_equal:today',
+            'condition' => 'nullable|max:1000',
         ]);
 
         try {

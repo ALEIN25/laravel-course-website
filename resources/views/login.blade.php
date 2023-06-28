@@ -18,12 +18,12 @@
     <input type="hidden" name="locale" value="{{ app()->getLocale() }}">
     <div>
         <label for="email">{{__('messages.email')}}</label>
-        <input type="email" id="email" name="email" required autofocus>
+        <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
     </div>
 
     <div>
         <label for="password">{{__('messages.password')}}</label>
-        <input type="password" id="password" name="password" required>
+        <input type="password" id="password" name="password" value="{{ old('password') }}" required>
     </div>
 
     <div>

@@ -6,6 +6,6 @@
         <p>{{__('messages.name')}} {{ $user->name }}</p>
         <p>{{__('messages.email')}} {{ $user->email }}</p>
         <p>{{__('messages.phonenum')}} {{ $user->phonenr }}</p>
-        <a href="{{ route('my-books', ['locale' => app()->getLocale()])}}">My Books</a>
+        <a href="{{ route('my-books', ['locale' => app()->getLocale()])}}">{{__('messages.mybooks')}}</a>
     </div>
 @endsection

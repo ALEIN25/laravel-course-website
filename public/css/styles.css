@@ -163,5 +163,42 @@ a {
   border-radius: 3px;
   cursor: pointer;
 }
+.book-details {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  width: 30%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
 
+
+.book-details img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.book-details h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.book-details p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #A28CFF;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
 
