@@ -44,7 +44,7 @@
     </form>
     @endif
     @endauth
-    @auth
+    
     @if(auth()->check() && auth()->user()->isInWishlist($book))
     <form action="{{ route('wishlist.remove', [$book->id]) }}" method="POST">
         @csrf
@@ -58,7 +58,7 @@
         <button type="submit">{{__('messages.addwishlist')}}</button>
     </form>
     @endif
-    @endauth
+    
 </div>
 </div>
 @endsection
