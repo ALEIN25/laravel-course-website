@@ -53,5 +53,7 @@
     </form>
     @else
     <p>{{__('messages.addlogin')}}</p>
+    <a href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{__('messages.login')}}</a>
+    <a href="{{route('register', ['locale' => app()->getLocale()])}}">{{__('messages.register')}}</a>
 @endauth
 @endsection

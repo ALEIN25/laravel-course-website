@@ -60,4 +60,5 @@ return [
     'bookdestroyed' => 'Grāmata ir izņemta.',
     'bookedit' => 'Grāmata ir izmainīta.',
     'registersuccses' => 'Jūs esat reģistrējies, lūdzu ierakstaties.',
+    'pleaselogreg' => 'Lūdzu ierakstaties, vai reģistrējaties, lai pievienotu veljmu sarakstam.',
 ];

@@ -44,21 +44,29 @@
     </form>
     @endif
     @endauth
-    
-    @if(auth()->check() && auth()->user()->isInWishlist($book))
+
+    @if (auth()->check() && auth()->user()->isInWishlist($book))
     <form action="{{ route('wishlist.remove', [$book->id]) }}" method="POST">
         @csrf
         @method('DELETE')
         <button type="submit">{{__('messages.removewishlist')}}</button>
     </form>
     @else
-
+    @guest
+    <p>{{__('messages.pleaselogreg')}}</p>
+    <br>
+    <a href="{{ route('login', ['locale' => app()->getLocale()]) }}">{{__('messages.login')}}</a>
+    <br>
+    <a href="{{route('register', ['locale' => app()->getLocale()])}}">{{__('messages.register')}}</a>
+    @else
     <form action="{{ route('wishlist.add', ['id' => $book->id]) }}" method="POST">
         @csrf
         <button type="submit">{{__('messages.addwishlist')}}</button>
     </form>
+    @endguest
     @endif
-    
+
+
 </div>
 </div>
 @endsection

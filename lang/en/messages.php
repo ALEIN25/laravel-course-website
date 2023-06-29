@@ -60,4 +60,5 @@ return [
     'bookdestroyed' => 'The book has been removed.',
     'bookedit' => 'The book has been edited.',
     'registersuccses' => 'You have registered, please login.',
+    'pleaselogreg' => 'Login or register if you wish to wishlist the book.',
 ];
